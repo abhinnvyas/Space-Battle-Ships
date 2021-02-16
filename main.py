@@ -1,6 +1,7 @@
 import pygame
 import os
 
+pygame.init()
 pygame.font.init()
 pygame.mixer.init()
 
@@ -12,6 +13,7 @@ BLACK = (0, 0, 0)
 YELLOW = (255, 255, 0)
 RED = (255, 0, 0)
 
+NORMAL_FONT = pygame.font.SysFont('comicsans', 100)
 HEALTH_FONT = pygame.font.SysFont('comicsans', 40)
 WIN_FONT = pygame.font.SysFont('comicsans', 100)
 
@@ -186,8 +188,59 @@ def main():
         draw_window(yellow, red, yellow_bullets,
                     red_bullets, yellow_health, red_health)
 
-    main()
+    main_menu()
+
+
+STATE_FONT = pygame.font.SysFont("comicsans", 35)
+
+
+def main_menu():
+
+    state = "start"
+    running = True
+    while running:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                pygame.quit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    state = "start"
+                if event.key == pygame.K_DOWN:
+                    state = "quit"
+                if event.key == pygame.K_RETURN:
+                    if state == "start":
+                        main()
+                    if state == "quit":
+                        quit()
+
+        WIN.blit(SPACE, (0, 0))
+
+        text = NORMAL_FONT.render("SPACE BATTLE", 1, YELLOW)
+        pygame.draw.rect(WIN, YELLOW, (WIDTH//2 - text.get_width()//2, HEIGHT //
+                                       2 - text.get_height() - 60, text.get_width()+10, text.get_height()+10), 3)
+        WIN.blit(text, (WIDTH//2 - text.get_width()//2 +
+                        5, HEIGHT//2 - text.get_height() - 50))
+
+        start_text = STATE_FONT.render("START", 1, YELLOW)
+        WIN.blit(start_text, (WIDTH//2 - start_text.get_width() //
+                              2, HEIGHT//2 - text.get_height()//2 + 30))
+
+        quit_text = STATE_FONT.render("QUIT", 1, YELLOW)
+        WIN.blit(quit_text, (WIDTH//2 - start_text.get_width() //
+                             2+7, HEIGHT//2 - text.get_height()//2 + 70))
+
+        if state == "start":
+            pygame.draw.rect(WIN, YELLOW, (WIDTH//2 - start_text.get_width()//2 - 10, HEIGHT//2 -
+                                           text.get_height()//2 + 23, start_text.get_width()+20, start_text.get_height()+10), 3)
+        elif state == "quit":
+            pygame.draw.rect(WIN, YELLOW, (WIDTH//2 - start_text.get_width()//2 - 10, HEIGHT//2 -
+                                           text.get_height()//2 + 65, start_text.get_width()+20, start_text.get_height()+10), 3)
+
+        pygame.display.update()
 
 
 if __name__ == '__main__':
-    main()
+    main_menu()
