@@ -7,11 +7,13 @@ pygame.mixer.init()
 
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Space Battle")
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 YELLOW = (255, 255, 0)
 RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 
 NORMAL_FONT = pygame.font.SysFont('comicsans', 100)
 HEALTH_FONT = pygame.font.SysFont('comicsans', 40)
@@ -102,18 +104,16 @@ def draw_winner(text):
     pygame.time.delay(5000)
 
 
-def draw_window(yellow, red, yellow_bullets, red_bullets, yellow_health, red_health):
+def draw_window(yellow, red, yellow_bullets, red_bullets, yellow_health, red_health, max_health):
 
     WIN.blit(SPACE, (0, 0))
     pygame.draw.rect(WIN, WHITE, BORDER)
 
-    yellow_health_text = HEALTH_FONT.render(
-        f"Health: {str(yellow_health)}", 1, WHITE)
-    red_health_text = HEALTH_FONT.render(
-        f"Health: {str(red_health)}", 1, WHITE)
+    pygame.draw.rect(WIN, WHITE, (10, 10, 200, 20))
+    pygame.draw.rect(WIN, YELLOW, (15, 15,187*(yellow_health/max_health), 10))
 
-    WIN.blit(yellow_health_text, (10, 10))
-    WIN.blit(red_health_text, (WIDTH - red_health_text.get_width() - 10, 10))
+    pygame.draw.rect(WIN, WHITE, (WIDTH - 200 -10, 10, 200, 20))
+    pygame.draw.rect(WIN, RED, (WIDTH - 200 -4, 15,187*(red_health/max_health), 10))
 
     WIN.blit(SPACESHIP_YELLOW, (yellow.x, yellow.y))
     WIN.blit(SPACESHIP_RED, (red.x, red.y))
@@ -137,6 +137,7 @@ def main():
     yellow_bullets = []
     red_bullets = []
 
+    max_health = 20
     yellow_health = 20
     red_health = 20
 
@@ -186,7 +187,7 @@ def main():
         handle_bullet_movement(yellow_bullets, red_bullets, yellow, red)
 
         draw_window(yellow, red, yellow_bullets,
-                    red_bullets, yellow_health, red_health)
+                    red_bullets, yellow_health, red_health, max_health)
 
     main_menu()
 
